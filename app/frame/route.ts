@@ -25,10 +25,10 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
 export async function POST(req: NextRequest, res: NextResponse) {
   const body = await req.json();
-  const fid = body.untrustedData.fid;
-  const address = await getConnectedAddressForUser(fid);
-  const balance = await balanceOf(address);
   const { isValid, message } = await fdk.validateFrameMessage(body);
+  const signedFid = message?.data?.fid
+  const address = signedFid ? await getConnectedAddressForUser(signedFid) : undefined;
+  const balance = address ? await balanceOf(address) : null;
   console.log(balance);
   if (typeof balance === "number" && balance !== null && balance < 0) {
     try {
