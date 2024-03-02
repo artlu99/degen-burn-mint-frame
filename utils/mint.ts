@@ -1,19 +1,21 @@
 import { createWalletClient, http, createPublicClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { baseSepolia } from "viem/chains";
+import { base } from "viem/chains";
 import contractAbi from "./contract.json";
 const contractAddress = process.env.CONTRACT_ADDRESS as `0x`;
+
+const tokenUri = process.env.TOKEN_URI as string;
 
 const account = privateKeyToAccount((process.env.PRIVATE_KEY as `0x`) || "");
 
 export const publicClient = createPublicClient({
-  chain: baseSepolia,
+  chain: base,
   transport: http(process.env.ALCHEMY_URL),
 });
 
 const walletClient = createWalletClient({
   account,
-  chain: baseSepolia,
+  chain: base,
   transport: http(process.env.ALCHEMY_URL),
 });
 
@@ -23,8 +25,8 @@ export async function mintNft(toAddress: string) {
       account,
       address: contractAddress,
       abi: contractAbi.output.abi,
-      functionName: "mint",
-      args: [toAddress, 0, 1, `0x`],
+      functionName: "safeMint",
+      args: [toAddress, tokenUri],
     });
     const transaction = await walletClient.writeContract(request);
     return transaction;
