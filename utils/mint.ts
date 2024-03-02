@@ -42,7 +42,7 @@ export async function balanceOf(address: string) {
       address: contractAddress,
       abi: contractAbi.output.abi,
       functionName: "balanceOf",
-      args: [address as `0x`, 0]
+      args: [address as `0x`]
     });
     const balance: number = Number(balanceData)
     return balance
