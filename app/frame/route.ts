@@ -30,7 +30,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   const balance = await balanceOf(address);
   const { isValid, message } = await fdk.validateFrameMessage(body);
   console.log(balance);
-  if (typeof balance === "number" && balance !== null && balance < 1) {
+  if (typeof balance === "number" && balance !== null && balance < 0) {
     try {
       const mint = await mintNft(address);
       console.log(mint);
