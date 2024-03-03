@@ -14,6 +14,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
       post_url: `${process.env.BASE_URL}/frame`,
       buttons: [{ label: "Mint NFT", action: "post" }],
       aspect_ratio: "1:1",
+      // mint
       cid: "QmbseWUy4GAo5GMdoeWqA827tPZmBSnrH5nFBYNtfr2M78",
     });
     return new NextResponse(frameMetadata);
@@ -41,10 +42,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
           { label: "Video Tutorial", action: "post_redirect" },
         ],
         aspect_ratio: "1:1",
+        // Mint Successful!!
         cid: "QmUx3kQH4vR2t7mTmW3jHJgJgJGxjoBsMxt6z1fkZEHyHJ",
       });
       if (isValid) {
-        await fdk.sendAnalytics("degen-burn-mint-frame", body);
+        await fdk.sendAnalytics("degen-burn-mint-frame-success", body);
       }
 
       return new NextResponse(frameMetadata);
@@ -56,14 +58,15 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const frameMetadata = await fdk.getFrameMetadata({
       post_url: `${process.env.BASE_URL}/redirect`,
       buttons: [
-        { label: "Blog Tutorial", action: "post_redirect" },
-        { label: "Video Tutorial", action: "post_redirect" },
+        { label: "Pinata Tutorial", action: "post_redirect" },
+        { label: "Public GH Repo", action: "post_redirect" },
       ],
       aspect_ratio: "1:1",
+      // Already Minted
       cid: "QmaaEbtsetwamJwfFPAQAFC6FAE1xeYsvF7EBKA8NYMjP2",
     });
     if (isValid) {
-      await fdk.sendAnalytics("degen-burn-mint-frame", body);
+      await fdk.sendAnalytics("degen-burn-mint-frame-already-minted", body);
     }
 
     return new NextResponse(frameMetadata);

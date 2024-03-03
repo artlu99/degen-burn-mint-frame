@@ -26,9 +26,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
   } else {
     try {
       if (isValid) {
-        await fdk.sendAnalytics("frame-mint-tutorial-video", body);
+        await fdk.sendAnalytics("frame-mint-github-repo", body);
       }
-      return NextResponse.redirect("https://youtu.be/5VVOMolm-TA", {
+      return NextResponse.redirect("https://github.com/artlu99/degen-burn-mint-frame", {
         status: 302,
       });
     } catch (error) {
