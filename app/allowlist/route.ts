@@ -10,7 +10,7 @@ const fdk = new PinataFDK({
 export async function GET(req: NextRequest, res: NextResponse) {
   try {
     const frameMetadata = await fdk.getFrameMetadata({
-      post_url: `${process.env.BASE_URL}/frame`,
+      post_url: `${process.env.BASE_URL}/allowlist`,
       buttons: [{ label: "Check Allowlist", action: "post" }],
       aspect_ratio: "1:1",
       // I will take it
