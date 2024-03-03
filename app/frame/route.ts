@@ -19,22 +19,25 @@ export async function GET(req: NextRequest, res: NextResponse) {
     });
     return new NextResponse(frameMetadata);
   } catch (error) {
-    console.log(error);
+    console.log('error in frame GET:', error);
     return NextResponse.json({ error: error });
   }
 }
 
 export async function POST(req: NextRequest, res: NextResponse) {
   const body = await req.json();
+  const spoofableFid = body.untrustedData.fid
   const { isValid, message } = await fdk.validateFrameMessage(body);
   const signedFid = message?.data?.fid
   const address = signedFid ? await getConnectedAddressForUser(signedFid) : undefined;
   const balance = address ? await balanceOf(address) : null;
-  console.log(balance);
+
+  console.log(`balance of ${spoofableFid}: ${balance}`);
+  
   if (typeof balance === "number" && balance !== null && balance < 0) {
     try {
       const mint = await mintNft(address);
-      console.log(mint);
+      console.log(`minted to ${mint}`);
       const frameMetadata = await fdk.getFrameMetadata({
         post_url: `${process.env.BASE_URL}/redirect`,
         buttons: [
@@ -51,7 +54,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
       return new NextResponse(frameMetadata);
     } catch (error) {
-      console.log(error);
+      console.log('error in mint frame:', error);
       return NextResponse.json({ error: error });
     }
   } else {

@@ -31,7 +31,7 @@ export async function mintNft(toAddress: string) {
     const transaction = await walletClient.writeContract(request);
     return transaction;
   } catch (error) {
-    console.log(error);
+    console.log('mintNft error:', error);
     return error;
   }
 }
@@ -47,7 +47,7 @@ export async function balanceOf(address: string) {
     const balance: number = Number(balanceData)
     return balance
   } catch (error) {
-    console.log(error);
+    console.log('balanceOf error:', error);
     return error;
   }
 }

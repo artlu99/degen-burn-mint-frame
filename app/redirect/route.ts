@@ -20,7 +20,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         { status: 302 },
       );
     } catch (error) {
-      console.log(error);
+      console.log('button 1 redirect error:', error);
       return NextResponse.json({ error: error });
     }
   } else {
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         status: 302,
       });
     } catch (error) {
-      console.log(error);
+      console.log('button 2 redirect error:', error);
       return NextResponse.json({ error: error });
     }
   }
