@@ -6,33 +6,35 @@ const fdk = new PinataFDK({
   pinata_gateway: process.env.GATEWAY_URL as string,
 });
 
+export const redirectButtons = [
+  {
+    buttonId: 1,
+    label: "Pinata Tutorial",
+    url: "https://www.pinata.cloud/blog/how-to-build-a-farcaster-frame-that-mints-nfts",
+    analytics: "frame-mint-tutorial-blog",
+  },
+  {
+    buttonId: 2,
+    label: "Public GH Repo",
+    url: "https://github.com/artlu99/degen-burn-mint-frame",
+    analytics: "frame-mint-github-repo",
+  },
+];
+
 export async function POST(req: NextRequest, res: NextResponse) {
   const body = await req.json();
   const buttonId = body.untrustedData.buttonIndex;
-  const { isValid, message } = await fdk.validateFrameMessage(body);
-  if (buttonId === 1) {
+  const buttonMeta = redirectButtons.find((rb) => rb.buttonId === buttonId);
+  const { isValid } = await fdk.validateFrameMessage(body);
+
+  if (buttonMeta) {
     try {
       if (isValid) {
-        await fdk.sendAnalytics("frame-mint-tutorial-blog", body);
+        await fdk.sendAnalytics(buttonMeta.analytics, body);
       }
-      return NextResponse.redirect(
-        "https://www.pinata.cloud/blog/how-to-build-a-farcaster-frame-that-mints-nfts",
-        { status: 302 },
-      );
+      return NextResponse.redirect(buttonMeta.url, { status: 302 });
     } catch (error) {
-      console.log('button 1 redirect error:', error);
-      return NextResponse.json({ error: error });
-    }
-  } else {
-    try {
-      if (isValid) {
-        await fdk.sendAnalytics("frame-mint-github-repo", body);
-      }
-      return NextResponse.redirect("https://github.com/artlu99/degen-burn-mint-frame", {
-        status: 302,
-      });
-    } catch (error) {
-      console.log('button 2 redirect error:', error);
+      console.log(`button ${buttonId} redirect error:`, error);
       return NextResponse.json({ error: error });
     }
   }

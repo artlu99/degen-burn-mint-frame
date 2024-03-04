@@ -18,25 +18,25 @@ export async function GET(req: NextRequest, res: NextResponse) {
     });
     return new NextResponse(frameMetadata);
   } catch (error) {
-    console.log('error in allowlist GET:', error);
+    console.log("error in allowlist GET:", error);
     return NextResponse.json({ error: error });
   }
 }
 
 export async function POST(req: NextRequest, res: NextResponse) {
   const body = await req.json();
-  const spoofableFid = body.untrustedData.fid
-  const matched = await isFidInAllowlist(spoofableFid)
+  const spoofableFid = body.untrustedData.fid;
+  const isAllowlisted = await isFidInAllowlist(spoofableFid);
 
-  if (matched) {
+  if (isAllowlisted) {
     const frameMetadata = await fdk.getFrameMetadata({
       aspect_ratio: "1:1",
       // speak, friend, and enter
       cid: "QmVz63gGoHB12DtkwDmgpbtqbkHw4Ps3aPWVpCuKecxd2w",
     });
-    
-    await fdk.sendAnalytics("degen-burn-mint-frame-matched", body);
-    
+
+    await fdk.sendAnalytics("degen-burn-mint-frame-allowed", body);
+
     return new NextResponse(frameMetadata);
   } else {
     const frameMetadata = await fdk.getFrameMetadata({
@@ -44,9 +44,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
       // thou shalt not pass
       cid: "QmU2Cuq1Asc1jmgeP1DZXT233iYaeUaifvfxJCtAaCDzcG",
     });
-    
-    await fdk.sendAnalytics("degen-burn-mint-frame-already-not-matched", body);
-    
+
+    await fdk.sendAnalytics("degen-burn-mint-frame-not-allowed", body);
+
     return new NextResponse(frameMetadata);
   }
 }
