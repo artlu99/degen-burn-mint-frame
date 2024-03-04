@@ -45,8 +45,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
       post_url: `${process.env.BASE_URL}/redirect`,
       buttons,
       aspect_ratio: "1:1",
-      // Already Minted
-      cid: "QmaaEbtsetwamJwfFPAQAFC6FAE1xeYsvF7EBKA8NYMjP2",
+      // can I haz another
+      cid: "QmWXyQAQfh22jhjjsksesZssSMPw1N7jAtbdbanf4KvvqR",
     });
     if (isValid) {
       await fdk.sendAnalytics("degen-burn-mint-frame-already-minted", body);
