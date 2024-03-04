@@ -3,7 +3,7 @@ import { getConnectedAddressForUser } from "@/utils/fc";
 import { mintNft, balanceOf } from "@/utils/mint";
 import { FrameButtonMetadata, PinataFDK } from "pinata-fdk";
 import { hasFidMinted, isFidInAllowlist, markFidAsMinted } from "@/utils/lists";
-import { redirectButtons } from "../redirect/route";
+import { redirectButtons } from "@/utils/buttons";
 
 const fdk = new PinataFDK({
   pinata_jwt: process.env.PINATA_JWT as string,
