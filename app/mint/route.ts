@@ -10,16 +10,17 @@ const fdk = new PinataFDK({
   pinata_gateway: process.env.GATEWAY_URL as string,
 });
 
-export default async function GET(
-  { params }: { params: { fid: string } },
+export async function GET(
   req: NextRequest,
   res: NextResponse
 ) {
-  const fid = params.fid;
+  const url = new URL(req.url);
+  const fid = url.searchParams.get('fid');
+
   if (fid)
     try {
       const frameMetadata = await fdk.getFrameMetadata({
-        post_url: `${process.env.BASE_URL}/mint/${fid}`,
+        post_url: `${process.env.BASE_URL}/mint?fid=${fid}`,
         buttons: [{ label: `Mint ${fid}`, action: "post" }],
         aspect_ratio: "1:1",
         // I will take it
@@ -37,13 +38,15 @@ export default async function GET(
 }
 
 export async function POST(
-  { params }: { params: { fid: string } },
   req: NextRequest,
   res: NextResponse
 ) {
+  const url = new URL(req.url);
+  const fid = url.searchParams.get('fid');
+
   const body = await req.json();
   const { isValid, message } = await fdk.validateFrameMessage(body);
-  const userInputFid = params.fid ? parseInt(params.fid) : undefined;
+  const userInputFid = fid ? parseInt(fid) : undefined;
   const hasMinted = userInputFid ? await hasFidMinted(userInputFid) : undefined;
   const isAllowlisted = userInputFid
     ? await isFidInAllowlist(userInputFid)
