@@ -10,7 +10,7 @@ const fdk = new PinataFDK({
   pinata_gateway: process.env.GATEWAY_URL as string,
 });
 
-export async function GET(
+export default async function GET(
   { params }: { params: { fid: string } },
   req: NextRequest,
   res: NextResponse
